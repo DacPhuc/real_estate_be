@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class RealEstateController {
 
     @GetMapping("/estates")
     public ResponseEntity<?> getMethod(@RequestParam(name = "page") int pageNumber, @RequestParam(name = "pageSize") int pageSize){
-        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Pageable pagination = PageRequest.of(pageNumber, pageSize, Sort.by("index").ascending());
         Page<Estate> estate = estateRepository.findAll(pagination);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", estate);
@@ -37,6 +38,7 @@ public class RealEstateController {
         try {
             return estateService.getGeolocation(id);
         }catch (Exception e){
+            System.out.println(e);
             return new ResponseEntity<>("Can't find estate have id " + id, HttpStatus.NOT_FOUND);
         }
     }

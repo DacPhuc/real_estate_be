@@ -1,12 +1,26 @@
 package com.project.se.domain;
 
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import org.json.simple.JSONObject;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "real_estate")
 @Data
+@TypeDefs({
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class),
+        @TypeDef(name = "int-array", typeClass = IntArrayType.class),
+        @TypeDef(name = "json", typeClass = JsonStringType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class Estate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,5 +47,7 @@ public class Estate {
     private String others;
     private String url;
     private String title;
-
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "json")
+    private JSONObject geo_location = null;
 }
