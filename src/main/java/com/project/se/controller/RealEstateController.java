@@ -3,6 +3,7 @@ package com.project.se.controller;
 import com.project.se.domain.Estate;
 import com.project.se.repository.EstateRepository;
 import com.project.se.service.EstateService;
+import com.project.se.service.EstateSocketService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ public class RealEstateController {
     @Autowired
     EstateService estateService;
 
+    @Autowired
+    EstateSocketService estateSocketService;
 
     @GetMapping("/estates")
     public ResponseEntity<?> getMethod(@RequestParam(name = "page") int pageNumber, @RequestParam(name = "pageSize") int pageSize){
