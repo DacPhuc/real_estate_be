@@ -4,6 +4,8 @@ import com.project.se.service.EstateSocketService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +26,8 @@ public class PushCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        String geoLocation = new String(message.getPayload());
-        estateSocketService.sendMessageToTopic("/topic/dacphuc", geoLocation);
+        JSONParser jsonParser = new JSONParser();
+        JSONObject geoLocation = (JSONObject) jsonParser.parse(new String(message.getPayload()));
+        estateSocketService.sendMessageToTopic(geoLocation);
     }
 }
