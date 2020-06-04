@@ -16,6 +16,7 @@ public class PushCallback implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
+        System.out.println(cause);
         System.out.println("Lost connection");
     }
 
@@ -26,8 +27,6 @@ public class PushCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject geoLocation = (JSONObject) jsonParser.parse(new String(message.getPayload()));
-        estateSocketService.sendMessageToTopic(geoLocation);
+        estateSocketService.sendMessageToTopic(new String(message.getPayload()));
     }
 }
