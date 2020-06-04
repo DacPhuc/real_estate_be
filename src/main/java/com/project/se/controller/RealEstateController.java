@@ -45,4 +45,10 @@ public class RealEstateController {
             return new ResponseEntity<>("Can't find estate have id " + id, HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/estates/light")
+    public ResponseEntity<?> turnLight(@RequestParam int status){
+        System.out.println(status);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
 }
