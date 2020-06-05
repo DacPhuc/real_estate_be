@@ -3,6 +3,9 @@ package com.project.se.service;
 import com.project.se.config.GoogleMapConfig;
 import com.project.se.domain.Estate;
 import com.project.se.repository.EstateRepository;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +42,19 @@ public class EstateService {
         estate.setGeo_location(geoLocation);
         estateRepository.save(estate);
         return location;
+    }
+
+    public void pushMessageToMqtt(int status) throws MqttException {
+        try {
+            MqttClient client = new MqttClient("tcp://localhost:1883", MqttClient.generateClientId());
+            client.connect();
+            MqttMessage message = new MqttMessage();
+            String action = status == 1 ? "Turn on light" : "turn off light";
+            message.setPayload(action.getBytes());
+            client.publish("/light", message);
+        } catch (MqttException e){
+            System.out.println(e.getMessage());
+            System.out.println("An error occur when send message to control light");
+        }
     }
 }
