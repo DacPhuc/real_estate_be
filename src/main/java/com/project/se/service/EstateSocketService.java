@@ -13,10 +13,11 @@ public class EstateSocketService {
     private SimpMessagingTemplate websocket;
 
     public void sendMessageToTopic(String message){
-        String[] coordinate = message.split(" ");
+        String filtered = message.replaceAll("[^0-9,]","");
+        String[] coordinate = filtered.split(",");
         HashMap<String, String> result = new HashMap<>();
-        result.put("lat", coordinate[0]);
-        result.put("lng", coordinate[1]);
+        result.put("lat", coordinate[1]);
+        result.put("lng", coordinate[0]);
         websocket.convertAndSend("/topic/dacphuc", result);
     }
 }
