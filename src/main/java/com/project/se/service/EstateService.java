@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -44,14 +45,14 @@ public class EstateService {
         return location;
     }
 
-    public void pushMessageToMqtt(int status) throws MqttException {
+    public void pushMessageToMqtt(Object status) throws MqttException {
         try {
-            MqttClient client = new MqttClient("tcp://localhost:1883", MqttClient.generateClientId());
+            MqttClient client = new MqttClient("tcp://13.76.250.158:1883", "Group_8");
+            String mess = status.toString();
             client.connect();
             MqttMessage message = new MqttMessage();
-            String action = status == 1 ? "Turn on light" : "turn off light";
-            message.setPayload(action.getBytes());
-            client.publish("/light", message);
+            message.setPayload(mess.getBytes());
+            client.publish("Topic/LightD", message);
         } catch (MqttException e){
             System.out.println(e.getMessage());
             System.out.println("An error occur when send message to control light");

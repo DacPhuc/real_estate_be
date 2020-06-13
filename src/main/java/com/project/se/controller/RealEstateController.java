@@ -15,9 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RealEstateController {
@@ -49,8 +47,8 @@ public class RealEstateController {
         }
     }
 
-    @GetMapping("/estates/light")
-    public ResponseEntity<?> turnLight(@RequestParam int status) throws MqttException {
+    @PostMapping("/estates/light")
+    public ResponseEntity<?> turnLight(@RequestBody Object status) throws MqttException {
         estateService.pushMessageToMqtt(status);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
