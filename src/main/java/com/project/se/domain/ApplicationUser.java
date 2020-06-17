@@ -9,13 +9,19 @@ import javax.persistence.*;
 @Data
 public class ApplicationUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String email;
 
     @Column(name = "password")
     private String password;
+
+    public ApplicationUser(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
     public int getId() {
         return id;
