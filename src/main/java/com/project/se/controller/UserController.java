@@ -57,6 +57,10 @@ public class UserController {
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
 
+        if (userRepository.existsByEmail(signUpRequest.getEmail())){
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
         ApplicationUser user = new ApplicationUser(signUpRequest.getName(), signUpRequest.getEmail(), signUpRequest.getPassword());
 
         user.setPassword(bCryptPasswordEncoder.encode(signUpRequest.getPassword()));
