@@ -9,10 +9,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -23,6 +23,9 @@ public class EstateService {
 
     @Autowired
     GoogleMapConfig googleMapConfig;
+
+    @Value("${qjzh.mqtt.host}")
+    private String serverInfo;
 
     public ResponseEntity getGeolocation(int estateId) throws Exception {
         Estate estate = estateRepository.findById(estateId).orElseThrow(() -> new Exception("Can find estate have id" + estateId));
@@ -45,15 +48,15 @@ public class EstateService {
         return location;
     }
 
-    public void pushMessageToMqtt(Object status) throws MqttException {
+    public void pushMessageToMqtt(String status) throws MqttException {
         try {
-            MqttClient client = new MqttClient("tcp://13.76.250.158:1883", "Group_8");
-            String mess = status.toString();
+            MqttClient client = new MqttClient(serverInfo, "Group_8", null);
             client.connect();
             MqttMessage message = new MqttMessage();
-            message.setPayload(mess.getBytes());
+            message.setPayload(status.getBytes());
             client.publish("Topic/LightD", message);
         } catch (MqttException e){
+            System.out.println(e.getCause());
             System.out.println(e.getMessage());
             System.out.println("An error occur when send message to control light");
         }

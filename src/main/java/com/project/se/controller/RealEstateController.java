@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,8 +48,9 @@ public class RealEstateController {
         }
     }
 
-    @PostMapping("/estates/light")
-    public ResponseEntity<?> turnLight(@RequestBody Object status) throws MqttException {
+    @PostMapping(value = "/estates/light", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> turnLight(@RequestBody String status) throws MqttException {
+        System.out.println(status);
         estateService.pushMessageToMqtt(status);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
