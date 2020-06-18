@@ -17,6 +17,9 @@ public class ApplicationUser {
     @Column(name = "password")
     private String password;
 
+    public ApplicationUser() {
+    }
+
     public ApplicationUser(String name, String email, String password) {
         this.name = name;
         this.email = email;

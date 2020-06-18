@@ -48,7 +48,7 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(authentication);
         System.out.println(jwt);
-        return ResponseEntity.ok(jwt);
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
     @PostMapping("/sign-up")
