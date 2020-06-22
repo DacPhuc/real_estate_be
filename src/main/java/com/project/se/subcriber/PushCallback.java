@@ -30,7 +30,6 @@ public class PushCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         try {
             String data = new String(message.getPayload());
-            System.out.println(data);
             JSONParser jsonParser = new JSONParser();
             JSONArray payload = (JSONArray) jsonParser.parse(data);
             JSONObject values = (JSONObject) payload.get(0);

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -47,18 +48,20 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(authentication);
-        System.out.println(jwt);
         return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> resigterNewUser(@Valid @RequestBody SignUpRequest signUpRequest){
+        HashMap<String, Boolean> result = new HashMap<>();
         if (userRepository.existsByName(signUpRequest.getName())){
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+            result.put("meta", false);
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+            result.put("meta", false);
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
 
         ApplicationUser user = new ApplicationUser(signUpRequest.getName(), signUpRequest.getEmail(), signUpRequest.getPassword());
@@ -67,6 +70,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>("Resister successfully", HttpStatus.OK);
+        result.put("meta", true);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
