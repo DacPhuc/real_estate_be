@@ -44,10 +44,13 @@ public class Estate {
     private String price;
     private String phone;
     private String email;
-    private String others;
-    private String url;
+    private String website_name;
+    private String price_unit;
+    private String realestate_url;
     private String title;
+    private String date;
     @Type(type = "jsonb")
     @Column(columnDefinition = "json")
     private JSONObject geo_location = null;
+//    private JSONObject geo_location = null;
 }

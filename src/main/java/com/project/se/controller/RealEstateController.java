@@ -1,6 +1,7 @@
 package com.project.se.controller;
 
 import com.project.se.domain.Estate;
+import com.project.se.dto.VisualEstateDTO;
 import com.project.se.repository.EstateRepository;
 import com.project.se.security.JWTTokenProvider;
 import com.project.se.service.EstateService;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @RestController
 public class RealEstateController {
@@ -34,6 +37,7 @@ public class RealEstateController {
         Page<Estate> estate = estateRepository.findAll(pagination);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", estate);
+        System.out.println(jsonObject);
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
@@ -52,5 +56,27 @@ public class RealEstateController {
         System.out.println(status);
         estateService.pushMessageToMqtt(status);
         return new ResponseEntity<>("Success", HttpStatus.OK);
+    @GetMapping("/estates/visualize")
+    public ResponseEntity<?> visualize(){
+        List<String> realEstateType = estateService.realEstateTypeList();
+        List<String> transactionType = estateService.transactionTypeList();
+        List<String> cityList = estateService.cityList();
+        List<String> districtHCM = estateService.districtHCMList();
+        List<String> districtHN = estateService.districtHNList();
+        HashMap<String, List> result = new HashMap<>();
+        result.put("estate_type", realEstateType);
+        result.put("transaction_type", transactionType);
+        result.put("city", cityList);
+        result.put("HCM", districtHCM);
+        result.put("HN", districtHN);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("estates/priceVisual")
+    public ResponseEntity<?> priceVisual(@RequestBody VisualEstateDTO visualEstateDTO) throws Exception{
+        Map<Date, Float> priceList = estateService.getAveragePrice(visualEstateDTO);
+        System.out.println(priceList);
+        return new ResponseEntity<>(priceList, HttpStatus.OK);
     }
 }
