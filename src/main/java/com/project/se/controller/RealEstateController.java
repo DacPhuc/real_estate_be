@@ -56,6 +56,8 @@ public class RealEstateController {
         System.out.println(status);
         estateService.pushMessageToMqtt(status);
         return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+    
     @GetMapping("/estates/visualize")
     public ResponseEntity<?> visualize(){
         List<String> realEstateType = estateService.realEstateTypeList();
