@@ -13,10 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -72,5 +69,11 @@ public class UserController {
 
         result.put("meta", true);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/check")
+    public boolean isAuthentication(@RequestHeader(name = "Authorization") String token) {
+        String jwt = token.substring(7);
+        return jwtTokenProvider.validateToken(jwt);
     }
 }

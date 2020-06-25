@@ -20,4 +20,8 @@ public class EstateSocketService {
         result.put("lng", coordinate[0]);
         websocket.convertAndSend("/topic/dacphuc", result);
     }
+
+    public void sendComment(int id){
+        websocket.convertAndSend("/topic/comment", id);
+    }
 }

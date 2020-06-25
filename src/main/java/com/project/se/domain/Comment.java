@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String comment;
     private int user_id;

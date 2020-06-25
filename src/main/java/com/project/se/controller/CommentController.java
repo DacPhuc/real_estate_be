@@ -1,23 +1,32 @@
 package com.project.se.controller;
 
+import com.project.se.domain.Comment;
 import com.project.se.dto.CommentDTO;
-import com.project.se.security.JWTTokenProvider;
+import com.project.se.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class CommentController {
     @Autowired
-    private JWTTokenProvider jwtTokenProvider;
+    CommentService commentService;
 
     @PostMapping("/estate/comment")
     public ResponseEntity<?> postComment(@RequestBody CommentDTO commentDTO, @RequestHeader(name = "Authorization") String token){
-        System.out.println(commentDTO);
-        return new ResponseEntity<>("Ok", HttpStatus.OK);
+        Comment result = commentService.postComment(commentDTO, token);
+        if (result == null){
+            return new ResponseEntity<>("Failed to create comment", HttpStatus.FAILED_DEPENDENCY);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/estate/comment")
+    public ResponseEntity<?> getComment(@RequestParam int estate_id){
+        List<Comment> commentList = commentService.getCommentForEstate(estate_id);
+        return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 }
