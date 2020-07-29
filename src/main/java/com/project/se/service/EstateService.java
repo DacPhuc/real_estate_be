@@ -120,17 +120,23 @@ public class EstateService {
             if (unit.equals(estate[1])){
                 if (priceDateList.get(date) != null){
                     List<Float> prices = priceDateList.get(date);
-                    prices.add(Float.parseFloat((String) estate[0]));
+                    try {
+                        prices.add(Float.parseFloat((String) estate[0]) / Float.parseFloat((String) estate[3]));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }else {
                     List<Float> prices = new ArrayList<>();
-                    prices.add(Float.parseFloat((String) estate[0]));
+                    try {
+                        prices.add(Float.parseFloat((String) estate[0]) / Float.parseFloat((String) estate[3]));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                     priceDateList.put(date, prices);
                 }
 
             }
         }
-
-        System.out.println(priceDateList);
 
         Map<Date, Float> priceList = new HashMap<>();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");

@@ -5,7 +5,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,13 +32,14 @@ public interface EstateRepository extends PagingAndSortingRepository<Estate, Int
     @Cacheable("HN_district")
     public List<String> districtHNList();
 
-    @Query(value = "SELECT price, price_unit, date FROM REAL_ESTATE " +
+    @Query(value = "SELECT price, price_unit, date, area FROM REAL_ESTATE " +
             "WHERE addr_city = :addr_city and addr_district = :addr_district " +
             "and realestate_type = :realestate_type and transaction_type = :transaction_type ", nativeQuery = true)
     public List<Object> priceDict(@Param("addr_city") String city,
                                  @Param("addr_district") String dist,
                                  @Param("realestate_type") String realestate,
-                                 @Param("transaction_type") String transaction);
+                                 @Param("transaction_type") String transaction
+    );
 
     @Query(value = "SELECT * FROM REAL_ESTATE " +
             "WHERE addr_city like CONCAT('%',:city,'%') and addr_district like CONCAT('%',:district,'%') " +
