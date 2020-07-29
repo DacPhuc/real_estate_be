@@ -2,6 +2,7 @@ package com.project.se.service;
 
 import com.project.se.config.GoogleMapConfig;
 import com.project.se.domain.Estate;
+import com.project.se.dto.EstateDTO;
 import com.project.se.dto.VisualEstateDTO;
 import com.project.se.repository.EstateRepository;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -148,6 +149,11 @@ public class EstateService {
         }
 
         return priceList;
+    }
+
+    public List<Estate> searchEstate(EstateDTO estateDTO){
+        List<Estate> result = estateRepository.search(estateDTO.getDistrict(), estateDTO.getCity(), estateDTO.getReal_type(), estateDTO.getMinPrice(), estateDTO.getMaxPrice());
+        return result;
     }
 
 }

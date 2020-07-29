@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,6 +40,17 @@ public interface EstateRepository extends PagingAndSortingRepository<Estate, Int
                                  @Param("addr_district") String dist,
                                  @Param("realestate_type") String realestate,
                                  @Param("transaction_type") String transaction);
+
+    @Query(value = "SELECT * FROM REAL_ESTATE " +
+            "WHERE addr_city like CONCAT('%',:city,'%') and addr_district like CONCAT('%',:district,'%') " +
+            "and realestate_type like CONCAT('%',:estate_type,'%') " +
+            "and price between :min and :max " +
+            "LIMIT 20", nativeQuery = true)
+    List<Estate> search(@Param("district") String district,
+                        @Param("city") String city,
+                        @Param("estate_type") String estate_type,
+                        @Param("min") String minPrice,
+                        @Param("max") String maxPrice);
 }
 
 

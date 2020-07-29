@@ -42,7 +42,6 @@ public class RealEstateController {
         Page<Estate> estate = estateRepository.findAll(pagination);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", estate);
-        System.out.println(jsonObject);
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
@@ -96,7 +95,9 @@ public class RealEstateController {
 
     @PostMapping("estates/search")
     public ResponseEntity<?> searchEstate(@RequestBody EstateDTO estateDTO){
-        System.out.println(estateDTO);
-        return new ResponseEntity<>("Hello nhe", HttpStatus.OK);
+        List<Estate> list = estateService.searchEstate(estateDTO);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", list);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
