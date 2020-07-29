@@ -52,5 +52,4 @@ public class Estate {
     @Type(type = "jsonb")
     @Column(columnDefinition = "json")
     private JSONObject geo_location = null;
-//    private JSONObject geo_location = null;
 }

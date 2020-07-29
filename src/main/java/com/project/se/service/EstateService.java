@@ -68,7 +68,6 @@ public class EstateService {
     }
     public List<String> realEstateTypeList() {
         List<String> realEstateList = estateRepository.realEstateTypeList();
-        System.out.println(realEstateList);
         return realEstateList;
     }
 
@@ -89,13 +88,11 @@ public class EstateService {
 
     public List<String> districtHCMList(){
         List<String> districtHCMList = estateRepository.districtHCMList();
-        System.out.println(districtHCMList);
         return districtHCMList;
     }
 
     public List<String> districtHNList(){
         List<String> districtHNList = estateRepository.districtHNList();
-        System.out.println(districtHNList);
         return districtHNList;
     }
 
@@ -116,7 +113,6 @@ public class EstateService {
         Map<String, List> priceDateList = new HashMap<>();
 
         Iterator iteratorPrice = priceDictList.iterator();
-        System.out.println("aaa");
         while (iteratorPrice.hasNext()) {
             Object[] estate = (Object[]) iteratorPrice.next();
             String date = (String) estate[2];

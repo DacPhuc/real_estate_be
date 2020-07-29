@@ -1,13 +1,13 @@
 package com.project.se.repository;
 
 import com.project.se.domain.Estate;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface EstateRepository extends PagingAndSortingRepository<Estate, Integer> {
@@ -15,18 +15,21 @@ public interface EstateRepository extends PagingAndSortingRepository<Estate, Int
     @Query(value = "SELECT realestate_type FROM REAL_ESTATE " +
             "group by realestate_type " +
             "having realestate_type != '' and count(realestate_type) > 700 ", nativeQuery = true)
+    @Cacheable("estate_type")
     public List<String> realEstateTypeList();
 
     @Query(value = "SELECT addr_district FROM REAL_ESTATE " +
             "group by addr_city, addr_district " +
             "HAVING addr_city = 'Hồ Chí Minh' and addr_district != '' and count(addr_district) > 1000"
             , nativeQuery = true)
+    @Cacheable("HCM_district")
     public List<String> districtHCMList();
 
     @Query(value = "SELECT addr_district FROM REAL_ESTATE " +
             "group by addr_city, addr_district " +
             "HAVING addr_city = 'Hà Nội' and addr_district != '' and count(addr_district) > 1000"
             , nativeQuery = true)
+    @Cacheable("HN_district")
     public List<String> districtHNList();
 
     @Query(value = "SELECT price, price_unit, date FROM REAL_ESTATE " +

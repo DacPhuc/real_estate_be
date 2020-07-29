@@ -1,11 +1,12 @@
 package com.project.se.controller;
 
 import com.project.se.domain.Estate;
+import com.project.se.dto.PricingPredictDTO;
 import com.project.se.dto.VisualEstateDTO;
 import com.project.se.repository.EstateRepository;
-import com.project.se.security.JWTTokenProvider;
 import com.project.se.service.EstateService;
 import com.project.se.service.EstateSocketService;
+import com.project.se.service.PredictionService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class RealEstateController {
 
     @Autowired
     EstateSocketService estateSocketService;
+
+    @Autowired
+    PredictionService predictionService;
 
     @GetMapping("/estates")
     public ResponseEntity<?> getMethod(@RequestParam(name = "page") int pageNumber, @RequestParam(name = "pageSize") int pageSize){
@@ -57,7 +61,7 @@ public class RealEstateController {
         estateService.pushMessageToMqtt(status);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
-    
+
     @GetMapping("/estates/visualize")
     public ResponseEntity<?> visualize(){
         List<String> realEstateType = estateService.realEstateTypeList();
@@ -78,7 +82,14 @@ public class RealEstateController {
     @PostMapping("estates/priceVisual")
     public ResponseEntity<?> priceVisual(@RequestBody VisualEstateDTO visualEstateDTO) throws Exception{
         Map<Date, Float> priceList = estateService.getAveragePrice(visualEstateDTO);
-        System.out.println(priceList);
         return new ResponseEntity<>(priceList, HttpStatus.OK);
+    }
+
+    @PostMapping("estate/predict")
+    public ResponseEntity<?> getPredictionPrice(@RequestBody PricingPredictDTO pricingPredictDTO) {
+        float price = predictionService.getPredictionPrice(pricingPredictDTO);
+        Map<String, Float> result = new HashMap<>();
+        result.put("price", price);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
