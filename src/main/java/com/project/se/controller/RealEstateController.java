@@ -1,6 +1,7 @@
 package com.project.se.controller;
 
 import com.project.se.domain.Estate;
+import com.project.se.dto.EstateDTO;
 import com.project.se.dto.PricingPredictDTO;
 import com.project.se.dto.VisualEstateDTO;
 import com.project.se.repository.EstateRepository;
@@ -91,5 +92,11 @@ public class RealEstateController {
         Map<String, Float> result = new HashMap<>();
         result.put("price", price);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("estates/search")
+    public ResponseEntity<?> searchEstate(@RequestBody EstateDTO estateDTO){
+        System.out.println(estateDTO);
+        return new ResponseEntity<>("Hello nhe", HttpStatus.OK);
     }
 }
