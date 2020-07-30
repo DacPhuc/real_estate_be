@@ -33,6 +33,7 @@ public class PushCallback implements MqttCallback {
             JSONParser jsonParser = new JSONParser();
             JSONArray payload = (JSONArray) jsonParser.parse(data);
             JSONObject values = (JSONObject) payload.get(0);
+            System.out.println(values);
             Object value = values.get("values");
             String geoLocation = value.toString();
             estateSocketService.sendMessageToTopic(geoLocation);
